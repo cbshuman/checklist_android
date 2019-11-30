@@ -1,17 +1,19 @@
 package com.example.cs356_project.Activities.ViewTools;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cs356_project.Activities.CheckListActivity;
+import com.example.cs356_project.Activities.Activity_ViewListItem;
 import com.example.cs356_project.AudioPlayer.AudioController;
 import com.example.cs356_project.R;
 import com.example.cs356_project.dataModel.CheckListItem;
@@ -62,7 +64,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.Chec
 
         public void BindCheckListItem(final CheckListItem checkListItem)
             {
-            System.out.println("  ----->   Binding Item . . .");
+            //System.out.println("  ----->   Binding Item . . .");
             //Set the contents
             final TextView content = view.findViewById(R.id.list_content);
             content.setText(checkListItem.GetContents());
@@ -104,6 +106,22 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.Chec
                         }
                     }
                 });
+
+            ImageView editDetailsIcon = view.findViewById(R.id.list_itemDetails);
+
+            editDetailsIcon.setOnClickListener(new View.OnClickListener()
+                {
+                @Override
+                public void onClick(View v)
+                    {
+                    System.out.println("  --- >> Listening to click . . .");
+                    Activity_ViewListItem.targetListItem = checkListItem;
+                    Intent intent = new Intent(view.getContext(), Activity_ViewListItem.class);
+                    view.getContext().startActivity(intent);
+                    }
+                });
+
+            //End of BindCheckListItem
             }
         }
     }

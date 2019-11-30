@@ -1,9 +1,9 @@
+package com.example.cs356_project.Serialization;
+
 import android.content.Context;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 
