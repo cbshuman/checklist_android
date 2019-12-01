@@ -14,4 +14,11 @@ public class AudioController
         mediaPlayer = MediaPlayer.create(context, UserSettings.getSound_congrats());
         mediaPlayer.start();
         }
+
+    public static void PlayMinorCongrats(Context context)
+        {
+        MediaPlayer mediaPlayer;
+        mediaPlayer = MediaPlayer.create(context, UserSettings.getSound_minorCongrats());
+        mediaPlayer.start();
+        }
     }

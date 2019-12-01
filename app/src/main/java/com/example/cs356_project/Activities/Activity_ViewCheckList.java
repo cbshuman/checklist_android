@@ -65,6 +65,13 @@ public class Activity_ViewCheckList extends Activity
             });
         }
 
+    @Override
+    protected void onResume()
+        {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+        }
+
     public void AddCheckListItem(String content)
         {
         UserSettings.checkListItems.add(new CheckListItem("given", content,false));

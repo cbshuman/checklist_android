@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Checker</string>
+    <string name="your_todo_list">Your Todo List:</string>
 </resources>

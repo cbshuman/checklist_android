@@ -24,9 +24,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:textSize="25dp"
+            android:textSize="25sp"
             android:layout_margin="5dp"
-            android:text="Your Todo List:"
+            android:text="@string/your_todo_list"
             />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -43,7 +43,6 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Position - Bottom Right"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
@@ -51,7 +50,7 @@
             >
                 <EditText
                     android:background="@drawable/roundedtextbox"
-                    android:hint="Enter new list item"
+                    android:hint="Enter new checklist item"
                     android:id="@+id/addListItemContent"
                     android:layout_weight="1"
                     android:layout_width="fill_parent"
