@@ -68,9 +68,9 @@ public class Activity_ViewListItem extends Activity
             @Override
             public void onClick(View v)
                 {
-                if(!addContext.equals(""))
+                if(!addContext.getText().toString().equals(""))
                     {
-                    targetListItem.AddSubListItem(addContext.getText().toString());
+                    targetListItem.AddNewSubListItem(addContext.getText().toString());
                     addContext.setText("");
                     }
                 adapter.notifyDataSetChanged();

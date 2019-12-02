@@ -22,21 +22,22 @@ public class CheckListItem extends Note
         priority = Priority.needed;
         }
 
-    public void AddSubListItem(String content)
+    public void AddNewSubListItem(String content)
         {
+        completed = false;
         //System.out.println("Creating: " + content);
         subListItems.add(new SubListItem("",content, false, this) );
         }
 
     public void SetCompleted(boolean completed)
         {
-        if(subListItems.size() > 0)
+        if(CheckComplete())
             {
-            this.completed = CheckComplete();
+            this.completed = completed;
             }
         else
             {
-            this.completed = completed;
+            this.completed = false;
             }
         }
 
