@@ -1,159 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/viewListItem_title"
-        android:text="Item Title"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="35dp"
-        />
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="15dp"
-            android:background="#555" />
-    </LinearLayout>
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Priority"
-            android:textSize="25sp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            />
-        <Spinner
-            android:id="@+id/spinner1"
-            android:textSize="25sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/priority"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Remind me?"
-            android:textSize="25sp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            />
-
-        <CheckBox
-            android:id="@+id/viewListItem_reminder"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleX="1.45"
-            android:scaleY="1.45"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/viewListItem_timepicker_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:layout_gravity="center_vertical"
-            android:text="Reminder time:"
-            />
-        <TimePicker
-            android:id="@+id/viewListItem_timepicker"
-            android:text="sadfasdf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:timePickerMode="spinner"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_weight="1"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        >
+        android:orientation="vertical" >
 
         <TextView
+            android:id="@+id/viewListItem_title"
+            android:text="Item Title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="35dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
+            />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="15dp"
+                android:background="#555" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sub-List:"
-            android:textSize="25sp"
-            android:layout_gravity="center"
-            />
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Priority"
+                android:textSize="25sp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                />
+            <Spinner
+                android:id="@+id/spinner1"
+                android:textSize="25sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/priority"
+                />
+        </LinearLayout>
 
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="#555" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/viewListItem_subList"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:scrollbars="vertical"
-            />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remind me?"
+                android:textSize="25sp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                />
 
-    </LinearLayout>
+            <Switch
+                android:id="@+id/viewListItem_reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/NewItemAdd"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Position - Bottom Right"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        >
-        <EditText
-            android:background="@drawable/roundedtextbox"
-            android:hint="Enter new sublist item"
-            android:id="@+id/viewListItem_addText"
+        <LinearLayout
+            android:id="@+id/viewListItem_timepicker_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="Reminder time:"
+                />
+
+            <TextView
+                android:id="@+id/viewListItem_timepicker_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_gravity="right"
+                android:text="00:00"
+                />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_weight="1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:layout_toLeftOf="@+id/addListItemButton"
-            />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:background="@drawable/roundedtextbox"
-            android:id="@+id/viewListItem_addSub"
-            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:text="Add"
-            android:layout_marginHorizontal="5dp"
-            />
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            >
 
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#555" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Sub-Tasks:"
+                android:textSize="25sp"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/viewListItem_nosublist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="35dp"
+                android:textSize="25sp"
+                android:text="None"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/viewListItem_subList"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:scrollbars="vertical"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/NewItemAdd"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Position - Bottom Right"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            >
+            <EditText
+                android:background="@drawable/roundedtextbox"
+                android:hint="Enter new sub task"
+                android:id="@+id/viewListItem_addText"
+                android:layout_weight="1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:layout_toLeftOf="@+id/addListItemButton"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:background="@drawable/roundedtextbox"
+                android:id="@+id/viewListItem_addSub"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:text="Add"
+                android:layout_marginHorizontal="5dp"
+                android:backgroundTint="@color/colorLight"
+                android:textColor="@color/white"
+                />
+
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/viewListItem_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:alpha=".25"
+        />
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/viewListItem_clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:padding="15dp"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            >
+        <TimePicker
+            android:id="@+id/viewListItem_timepicker"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="right"
+                >
+
+            <Button
+                android:id="@+id/viewListItem_timepick_cancel"
+                android:text="Cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:textColor="@color/colorAccent"
+                />
+
+            <Button
+                android:id="@+id/viewListItem_timepick_okay"
+                android:text="Okay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:textColor="@color/colorAccent"
+                />
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

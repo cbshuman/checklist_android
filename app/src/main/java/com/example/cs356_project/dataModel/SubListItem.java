@@ -1,9 +1,11 @@
 package com.example.cs356_project.dataModel;
 
-public class SubListItem extends Note
+import java.io.Serializable;
+
+public class SubListItem extends Note implements Serializable
     {
     private boolean completed;
-    private CheckListItem parentItem;
+    private transient CheckListItem parentItem;
 
     public SubListItem(String id, String contents, boolean completed,CheckListItem parentItem)
         {
@@ -26,5 +28,10 @@ public class SubListItem extends Note
     public void RemoveFromParent()
         {
         parentItem.RemoveItem(this);
+        }
+
+    public void UpdateParent(CheckListItem parentItem)
+        {
+        this.parentItem = parentItem;
         }
     }

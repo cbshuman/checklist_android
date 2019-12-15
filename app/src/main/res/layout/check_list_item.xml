@@ -31,13 +31,22 @@
             android:layout_weight="1"
             android:layout_toRightOf="@id/list_checkbox"
             />
+        <ImageView
+            android:id="@+id/list_itemDelete"
+            android:src ="@drawable/ic_delete_black_24dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_toRightOf="@id/list_content"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="right"
+            />
 
         <ImageView
             android:id="@+id/list_itemDetails"
             android:src ="@drawable/ic_add_black_24dp"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_toRightOf="@id/list_content"
+            android:layout_toRightOf="@id/list_itemDelete"
             android:layout_gravity="right"
             />
 

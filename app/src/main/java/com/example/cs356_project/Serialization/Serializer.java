@@ -9,12 +9,14 @@ import java.io.InputStreamReader;
 
 public class Serializer
     {
-    public static void WriteToFile(String targetFile, Context context)
+    public static void WriteToFile(String targetFile, String data, Context context)
         {
+        System.out.println("Writting to file: " + targetFile + "\n" + data);
         try
             {
             FileOutputStream fileStream = context.openFileOutput(targetFile, Context.MODE_PRIVATE);
 
+            fileStream.write(data.getBytes());
 
             fileStream.close();
             }
@@ -50,6 +52,8 @@ public class Serializer
             e.printStackTrace();
             }
 
+        //System.out.println("---------> Read in: " + "\n" + returnValue.toString());
+
         //Return whatever was in the file
         return (returnValue.toString());
         }
@@ -58,7 +62,15 @@ public class Serializer
         {
         boolean returnValue = false;
 
-
+        try
+            {
+            FileInputStream fileStream = context.openFileInput(targetFile);
+            fileStream.close();
+            returnValue = true;
+            }
+        catch (Exception e)
+            {
+            }
 
         return(returnValue);
         }

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cs356_project.AudioPlayer.AudioController;
 import com.example.cs356_project.R;
 import com.example.cs356_project.dataModel.SubListItem;
+import com.example.cs356_project.dataModel.UserSettings.UserSettings;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -116,7 +117,7 @@ public class SubListAdapter extends RecyclerView.Adapter<SubListAdapter.CheckSub
                 public void onClick(View v)
                     {
                     subListItem.RemoveFromParent();
-                    notifyDataSetChanged();
+                    UserSettings.UpdateList();
                     }
                 });
             //End of BindCheckListItem

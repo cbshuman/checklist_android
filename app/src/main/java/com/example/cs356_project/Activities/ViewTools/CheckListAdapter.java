@@ -24,6 +24,7 @@ import com.example.cs356_project.Activities.Activity_ViewListItem;
 import com.example.cs356_project.AudioPlayer.AudioController;
 import com.example.cs356_project.R;
 import com.example.cs356_project.dataModel.CheckListItem;
+import com.example.cs356_project.dataModel.UserSettings.UserSettings;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -35,6 +36,12 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.Chec
     public CheckListAdapter(List<CheckListItem> checkListItems)
         {
         this.checkListItems = checkListItems;
+        }
+
+    public void UpdateList(List<CheckListItem> newList)
+        {
+        checkListItems = newList;
+        notifyDataSetChanged();
         }
 
     @Override
@@ -140,6 +147,19 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.Chec
             RecyclerView recyclerView = view.findViewById(R.id.list_subItemList);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(layoutManager);
+
+            //Set the checkbox
+            final ImageView deleteButton = view.findViewById(R.id.list_itemDelete);
+            deleteButton.setOnClickListener(new View.OnClickListener()
+                {
+                @Override
+                public void onClick(View v)
+                    {
+                    UserSettings.checkListItems.remove(checkListItem);
+                    UserSettings.UpdateList();
+                    notifyDataSetChanged();
+                    }
+                });
 
             //End of BindCheckListItem
             }

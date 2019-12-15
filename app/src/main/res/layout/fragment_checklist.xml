@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,11 +7,14 @@
     tools:context=".Activities.Activity_ViewCheckList"
     >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        >
         <LinearLayout
             android:layout_weight="1"
             android:id="@+id/ToDoContainer"
@@ -20,14 +23,49 @@
             android:layout_height="match_parent"
             >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/colorPrimary"
+            >
+
         <TextView
+            android:id="@+id/list_title"
+            android:text="@string/your_todo_list"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:textSize="25sp"
+            android:textSize="35sp"
             android:layout_margin="5dp"
-            android:text="@string/your_todo_list"
+            android:textColor="@color/white"
             />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/list_date"
+                    android:text="12/25/92"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    android:textColor="@color/white"
+                    />
+
+                <ImageView
+                    android:id="@+id/list_dateIcon"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/calendar_white_24dp"
+                    android:layout_marginLeft="5dp"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/checkbox_recycleView"
@@ -38,41 +76,98 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/NewItemAdd"
-            android:orientation="horizontal"
+            <LinearLayout
+                android:id="@+id/NewItemAdd"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                >
+                    <EditText
+                        android:background="@drawable/roundedtextbox"
+                        android:hint="Enter new checklist item"
+                        android:id="@+id/addListItemContent"
+                        android:layout_weight="1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:layout_toLeftOf="@+id/addListItemButton"
+                        />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:background="@drawable/roundedtextbox"
+                        android:id="@+id/addListItemButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:text="Add"
+                        android:layout_marginHorizontal="5dp"
+                        android:backgroundTint="@color/colorLight"
+                        android:textColor="@color/white"
+                        />
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/list_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            android:alpha=".25"
+            />
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/list_calendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
+            android:layout_marginTop="100dp"
+            android:background="@color/white"
+            android:padding="15dp"
             >
-                <EditText
-                    android:background="@drawable/roundedtextbox"
-                    android:hint="Enter new checklist item"
-                    android:id="@+id/addListItemContent"
-                    android:layout_weight="1"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/white"
+                >
+                <TextView
+                    android:text="Choose a date to edit a checklist:"
+                    android:textSize="25sp"
+                    android:textAlignment="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+                <CalendarView
+                    android:id="@+id/list_calenderView"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#000"
-                    android:layout_toLeftOf="@+id/addListItemButton"
                     />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:background="@drawable/roundedtextbox"
-                    android:id="@+id/addListItemButton"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:text="Add"
-                    android:layout_marginHorizontal="5dp"
-                    />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="right"
+                    >
 
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+                    <Button
+                        android:id="@+id/list_calendar_cancel"
+                        android:text="Cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:textColor="@color/colorAccent"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+</RelativeLayout>

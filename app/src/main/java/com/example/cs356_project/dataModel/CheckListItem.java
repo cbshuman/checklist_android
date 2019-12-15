@@ -2,15 +2,18 @@ package com.example.cs356_project.dataModel;
 
 import android.widget.CheckBox;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CheckListItem extends Note
+public class CheckListItem extends Note implements Serializable
     {
     private boolean completed;
     public boolean reminder = false;
+    public int reminderHour;
+    public int reminderMinute;
     public Priority priority;
-    public List<SubListItem> subListItems;
+    public ArrayList<SubListItem> subListItems;
 
     public CheckListItem(String id,String contents, boolean completed)
         {
@@ -68,5 +71,13 @@ public class CheckListItem extends Note
     public void RemoveItem(SubListItem subListItem)
         {
         subListItems.remove(subListItem);
+        }
+
+    public void VerifyChildren()
+        {
+        for(SubListItem i : subListItems)
+            {
+            i.UpdateParent(this);
+            }
         }
     }
