@@ -45,7 +45,7 @@
                 android:layout_weight="1"
                 />
             <Spinner
-                android:id="@+id/spinner1"
+                android:id="@+id/prioritySpinner"
                 android:textSize="25sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -155,6 +155,8 @@
             <EditText
                 android:background="@drawable/roundedtextbox"
                 android:hint="Enter new sub task"
+                android:maxLines="1"
+                android:inputType="text"
                 android:id="@+id/viewListItem_addText"
                 android:layout_weight="1"
                 android:layout_width="fill_parent"

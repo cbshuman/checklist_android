@@ -1,6 +1,7 @@
 package com.example.cs356_project.Activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CalendarView;
@@ -15,12 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cs356_project.Activities.ViewTools.CheckListAdapter;
 import com.example.cs356_project.Activities.ViewTools.View_Activity;
 import com.example.cs356_project.R;
-import com.example.cs356_project.Serialization.Serializer;
 import com.example.cs356_project.dataModel.CheckListItem;
 import com.example.cs356_project.dataModel.Date;
 import com.example.cs356_project.dataModel.UserSettings.UserSettings;
-
-import java.util.ArrayList;
 
 public class Activity_ViewCheckList extends Activity implements View_Activity
     {
@@ -29,6 +27,8 @@ public class Activity_ViewCheckList extends Activity implements View_Activity
     private RelativeLayout calendarOverlay;
     private CalendarView calendarView;
     private TextView dateTitle;
+    private RecyclerView recyclerView;
+    private Date date;
 
     CheckListAdapter adapter;
 
@@ -63,7 +63,7 @@ public class Activity_ViewCheckList extends Activity implements View_Activity
 
         adapter = new CheckListAdapter(UserSettings.checkListItems);
 
-        RecyclerView recyclerView = findViewById(R.id.checkbox_recycleView);
+        recyclerView = findViewById(R.id.checkbox_recycleView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -82,7 +82,7 @@ public class Activity_ViewCheckList extends Activity implements View_Activity
                     {
                     editText.setText("");
                     AddCheckListItem(currentText);
-                    UpdateListChange();
+                    UpdateList();
                     }
                 }
             });
@@ -109,9 +109,19 @@ public class Activity_ViewCheckList extends Activity implements View_Activity
             });
         }
 
-    private void SetUp()
+    @Override
+    protected void onResume()
         {
+        super.onResume();
+        UserSettings.SetCurrentActivity(this);
+        UserSettings.UpdateList();
+        }
 
+    @Override
+    public void onPause()
+        {
+        super.onPause();
+        UserSettings.SaveListData();
         }
 
     protected void ShowCalendar(boolean input)
@@ -128,24 +138,17 @@ public class Activity_ViewCheckList extends Activity implements View_Activity
             }
         }
 
-    @Override
-    protected void onResume()
-        {
-        super.onResume();
-        adapter.notifyDataSetChanged();
-        }
-
     public void AddCheckListItem(String content)
         {
         UserSettings.checkListItems.add(new CheckListItem("given", content,false));
-        UpdateListChange();
+        System.out.println(UserSettings.checkListItems);
+        UserSettings.UpdateList();
         UserSettings.SaveListData();
         }
 
     protected void ChangeCurrentDate(int year, int month, int dayOfMonth)
         {
         UserSettings.SetNewDate(year,month,dayOfMonth);
-
         UpdateList();
         }
 
@@ -158,6 +161,6 @@ public class Activity_ViewCheckList extends Activity implements View_Activity
     @Override
     public void UpdateListChange()
         {
-        adapter.UpdateList(UserSettings.checkListItems);
+        adapter.notifyDataSetChanged();
         }
     }

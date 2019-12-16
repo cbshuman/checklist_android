@@ -63,60 +63,71 @@ public class SubListAdapter extends RecyclerView.Adapter<SubListAdapter.CheckSub
             this.view = itemView;
             }
 
-        public void BindListItem(final SubListItem subListItem)
+        public void BindListItem(SubListItem input)
             {
+            checkListItem = input;
             //System.out.println("  ----->   Binding Item : " + subListItem.GetContents());
-            //Set the contents
+            //Get the required views
             final TextView content = view.findViewById(R.id.sublist_content);
-            content.setText(subListItem.GetContents());
+            final LinearLayout parent = view.findViewById(R.id.checkListItem_P);
+
+            //Set the text
+            content.setText(checkListItem.GetContents());
 
             //Set the checkbox
             final CheckBox checkBox = view.findViewById(R.id.sublist_checkbox);
-            checkBox.setChecked(subListItem.getCompleted());
+            if(checkListItem.getCompleted())
+                {
+                checkBox.setChecked(checkListItem.getCompleted());
+                parent.setBackgroundColor(ContextCompat.getColor(view.getContext(),R.color.colorTaskCompleted));
+                content.setPaintFlags(content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
 
             checkBox.setOnClickListener(new View.OnClickListener()
                 {
                 @Override
                 public void onClick(View v)
                     {
-                    LinearLayout parent = view.findViewById(R.id.checkListItem_P);
-                    subListItem.SetCompleted(checkBox.isChecked());
-                    checkBox.setChecked(subListItem.getCompleted());
-
-                    if(subListItem.getCompleted())
+                    if(!checkListItem.ParentCompleted())
                         {
-                        parent.setBackgroundColor(ContextCompat.getColor(view.getContext(),R.color.colorTaskCompleted));
+                        checkListItem.SetCompleted(checkBox.isChecked());
+                        checkBox.setChecked(checkListItem.getCompleted());
 
-                        //Text changes
-                        //content.setTextColor(ContextCompat.getColor(view.getContext(),R.color.white));
-                        content.setPaintFlags(content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                        if(checkListItem.getCompleted())
+                            {
+                            parent.setBackgroundColor(ContextCompat.getColor(view.getContext(),R.color.colorTaskCompleted));
 
-                        AudioController.PlayMinorCongrats(view.getContext());
+                            //Text changes
+                            //content.setTextColor(ContextCompat.getColor(view.getContext(),R.color.white));
+                            content.setPaintFlags(content.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-                        Snackbar snackbar = Snackbar.make(view,"Congrats on finishing that subtask!", Snackbar.LENGTH_SHORT);
-                        snackbar.show();
-                        }
-                    else
-                        {
-                        parent.setBackgroundColor(ContextCompat.getColor(view.getContext(),R.color.white));
+                            AudioController.PlayMinorCongrats(view.getContext());
 
-                        //Text changes
-                        //content.setTextColor(ContextCompat.getColor(view.getContext(),R.color.white));
-                        content.setPaintFlags(content.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                            Snackbar snackbar = Snackbar.make(view,"Congrats on finishing that subtask!", Snackbar.LENGTH_SHORT);
+                            snackbar.show();
+                            }
+                        else
+                            {
+                            parent.setBackgroundColor(ContextCompat.getColor(view.getContext(),R.color.white));
 
-                        content.setTextColor(ContextCompat.getColor(view.getContext(),R.color.black));
+                            //Text changes
+                            //content.setTextColor(ContextCompat.getColor(view.getContext(),R.color.white));
+                            content.setPaintFlags(content.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+
+                            content.setTextColor(ContextCompat.getColor(view.getContext(),R.color.black));
+                            }
                         }
                     }
                 });
 
-            //Set the checkbox
+            //Set the delete button
             final ImageView deleteButton = view.findViewById(R.id.sublist_delete);
             deleteButton.setOnClickListener(new View.OnClickListener()
                 {
                 @Override
                 public void onClick(View v)
                     {
-                    subListItem.RemoveFromParent();
+                    checkListItem.RemoveFromParent();
                     UserSettings.UpdateList();
                     }
                 });

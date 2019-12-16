@@ -1,12 +1,18 @@
 package com.example.cs356_project.dataModel.UserSettings;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.graphics.Color;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.cs356_project.Activities.ViewTools.View_Activity;
 import com.example.cs356_project.R;
 import com.example.cs356_project.Serialization.Serializer;
 import com.example.cs356_project.dataModel.CheckListItem;
+import com.example.cs356_project.dataModel.CheckListItemSorter;
 import com.example.cs356_project.dataModel.Date;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -14,6 +20,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class UserSettings
@@ -34,8 +42,29 @@ public class UserSettings
     private static View_Activity currentActivity;
     private static Date currentListDate;
 
+    public static CharSequence GetNotificationPrefix()
+        {
+        return ("Just a reminder: ");
+        }
+
     public void SetUserSettings()
         {
+        }
+
+    private static void SetupNotificationGroups()
+        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            {
+            CharSequence name = "test";
+            String description = "Just for testing";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("test", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = ((Activity)currentActivity).getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+            }
         }
 
     public static void SetNewDate(int year, int month, int dayOfMonth)
@@ -45,6 +74,8 @@ public class UserSettings
         currentListDate = new Date(year,month,dayOfMonth);
 
         LoadListData();
+
+        UpdateList();
         }
 
     public static Date GetCurrentDate()
@@ -65,9 +96,8 @@ public class UserSettings
 
         if(Serializer.CheckIfFileExists(currentListDate.toString(),(Activity)currentActivity))
             {
-            //System.out.println("Tryin to load. . .");
+            System.out.println("Tryin to load. . .");
             String loadedData = Serializer.ReadFromFile(currentListDate.toString(),(Activity)currentActivity);
-
             //Load it up
             Type listType = new TypeToken<ArrayList<CheckListItem>>(){}.getType();
             checkListItems = new Gson().fromJson(loadedData,listType);
@@ -76,7 +106,6 @@ public class UserSettings
                 {
                 i.VerifyChildren();
                 }
-
             //System.out.println("Got a list : " + (checkListItems != null));
             }
         else
@@ -89,6 +118,8 @@ public class UserSettings
     public static void SaveListData()
         {
         String jsonListData = new Gson().toJson(checkListItems);
+        System.out.println("Saving:");
+        System.out.println(jsonListData);
         Serializer.WriteToFile(currentListDate.toString(),jsonListData, (Activity)currentActivity);
         }
 
@@ -114,6 +145,7 @@ public class UserSettings
 
     public static void UpdateList()
         {
+        Collections.sort(checkListItems,new CheckListItemSorter());
         currentActivity.UpdateListChange();
         }
 

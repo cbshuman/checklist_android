@@ -90,6 +90,8 @@
                         android:background="@drawable/roundedtextbox"
                         android:hint="Enter new checklist item"
                         android:id="@+id/addListItemContent"
+                        android:maxLines="1"
+                        android:inputType="text"
                         android:layout_weight="1"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"

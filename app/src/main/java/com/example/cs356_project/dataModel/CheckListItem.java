@@ -4,6 +4,7 @@ import android.widget.CheckBox;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class CheckListItem extends Note implements Serializable
@@ -80,4 +81,5 @@ public class CheckListItem extends Note implements Serializable
             i.UpdateParent(this);
             }
         }
+
     }

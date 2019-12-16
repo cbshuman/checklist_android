@@ -34,4 +34,9 @@ public class SubListItem extends Note implements Serializable
         {
         this.parentItem = parentItem;
         }
+
+    public boolean ParentCompleted()
+        {
+        return(parentItem.getCompleted());
+        }
     }

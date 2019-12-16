@@ -1,17 +1,25 @@
 package com.example.cs356_project.Activities;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,12 +27,14 @@ import com.example.cs356_project.Activities.ViewTools.SubListAdapter;
 import com.example.cs356_project.Activities.ViewTools.View_Activity;
 import com.example.cs356_project.R;
 import com.example.cs356_project.dataModel.CheckListItem;
+import com.example.cs356_project.dataModel.Priority;
 import com.example.cs356_project.dataModel.UserSettings.UserSettings;
 
 public class Activity_ViewListItem extends Activity implements View_Activity
     {
     public static CheckListItem targetListItem;
 
+    //GUI elements
     private SubListAdapter adapter;
     private LinearLayout timePicker;
     private TimePicker timeSelection;
@@ -46,8 +56,27 @@ public class Activity_ViewListItem extends Activity implements View_Activity
         TextView title = findViewById(R.id.viewListItem_title);
         title.setText("Todo: " + targetListItem.GetContents());
 
+        //Set the priority
+        Spinner prioritySpinner = findViewById(R.id.prioritySpinner);
+        prioritySpinner.setSelection(targetListItem.priority.ordinal());
+        prioritySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+            {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                {
+                targetListItem.priority = Priority.values()[position];
+                }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+                {
+
+                }
+            });
         //Setup the reminder checkbox
         final Switch reminderBox = findViewById(R.id.viewListItem_reminder);
+        reminderBox.setChecked(targetListItem.reminder);
+
         reminderBox.setOnClickListener(new View.OnClickListener()
             {
             @Override
@@ -134,6 +163,15 @@ public class Activity_ViewListItem extends Activity implements View_Activity
                 ShowClock(true);
                 }
             });
+
+        UpdateListChange();
+        }
+
+    @Override
+    public void onPause()
+        {
+        super.onPause();
+        UserSettings.SaveListData();
         }
 
     private void RevealTimePicker()
@@ -145,6 +183,21 @@ public class Activity_ViewListItem extends Activity implements View_Activity
         else
             {
             timePicker.setVisibility(View.VISIBLE);
+
+
+
+
+            //Create notification
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"test")
+                    .setSmallIcon(R.drawable.ic_check_black_24dp)
+                    .setContentTitle(UserSettings.GetNotificationPrefix() + targetListItem.GetContents())
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            Notification notif = builder.build();
+
+            NotificationManager NotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+            NotificationManager.notify(001,notif);
             }
         }
 
@@ -215,13 +268,13 @@ public class Activity_ViewListItem extends Activity implements View_Activity
     public void UpdateListChange()
         {
         adapter.notifyDataSetChanged();
-        if(targetListItem.subListItems.size() > 0)
+        if(targetListItem.subListItems.size() == 0)
             {
-            noSubItems.setVisibility(View.GONE);
+            noSubItems.setVisibility(View.VISIBLE);
             }
         else
             {
-            noSubItems.setVisibility(View.VISIBLE);
+            noSubItems.setVisibility(View.GONE);
             }
         }
     }
