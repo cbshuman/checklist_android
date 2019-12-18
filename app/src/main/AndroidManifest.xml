@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_round"
@@ -18,10 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.MainActivity" android:launchMode="singleInstance" />
         <activity android:name=".Activities.Activity_ViewListItem" />
 
-        <receiver android:name=".NotificationManager.NotificationCreator" android:enabled="false" />
+        <receiver android:name=".NotificationManager.NotificationCreator"/>
     </application>
 
 </manifest>

@@ -11,7 +11,6 @@ public class CheckListItemSorter implements Comparator<CheckListItem>
         int returnValue = 0;
         if(o.getCompleted() &&  a.getCompleted())
             {
-
             //The other has a higher priority
             if(o.priority.ordinal() > a.priority.ordinal())
                 {

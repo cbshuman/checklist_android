@@ -5,8 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.graphics.Color;
 import android.os.Build;
-
-import androidx.annotation.RequiresApi;
+import android.view.View;
 
 import com.example.cs356_project.Activities.ViewTools.View_Activity;
 import com.example.cs356_project.R;
@@ -19,9 +18,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class UserSettings
@@ -51,14 +48,14 @@ public class UserSettings
         {
         }
 
-    private static void SetupNotificationGroups()
+    public static void SetupNotificationGroups()
         {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             {
-            CharSequence name = "test";
-            String description = "Just for testing";
+            CharSequence name = "Reminders";
+            String description = "Reminders for to-do items";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("test", name, importance);
+            NotificationChannel channel = new NotificationChannel("Reminders", name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
@@ -152,5 +149,10 @@ public class UserSettings
     public static void SetCurrentActivity(View_Activity activity)
         {
         currentActivity = activity;
+        }
+
+    public static View_Activity GetCurrentActiviy()
+        {
+        return(currentActivity);
         }
     }

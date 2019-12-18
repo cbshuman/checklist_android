@@ -1,11 +1,10 @@
 package com.example.cs356_project.Activities;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.os.Build;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,18 +18,25 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import androidx.core.app.NotificationCompat;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cs356_project.Activities.ViewTools.RecyclerItemTouchHelper;
 import com.example.cs356_project.Activities.ViewTools.SubListAdapter;
 import com.example.cs356_project.Activities.ViewTools.View_Activity;
+import com.example.cs356_project.NotificationManager.NotificationCreator;
 import com.example.cs356_project.R;
 import com.example.cs356_project.dataModel.CheckListItem;
 import com.example.cs356_project.dataModel.Priority;
+import com.example.cs356_project.dataModel.SubListItem;
 import com.example.cs356_project.dataModel.UserSettings.UserSettings;
+import com.google.android.material.snackbar.Snackbar;
 
-public class Activity_ViewListItem extends Activity implements View_Activity
+import java.util.Calendar;
+
+public class Activity_ViewListItem extends Activity implements View_Activity, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
     {
     public static CheckListItem targetListItem;
 
@@ -42,6 +48,7 @@ public class Activity_ViewListItem extends Activity implements View_Activity
     private RelativeLayout overlayBG;
     private TextView timeView;
     private TextView noSubItems;
+    private RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -131,9 +138,13 @@ public class Activity_ViewListItem extends Activity implements View_Activity
 
         noSubItems = findViewById(R.id.viewListItem_nosublist);
 
-        RecyclerView recyclerView = findViewById(R.id.viewListItem_subList);
+        recyclerView = findViewById(R.id.viewListItem_subList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+
+        // attaching the touch helper to recycler view
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT + ItemTouchHelper.RIGHT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
         //Add text
         final EditText addContext = findViewById(R.id.viewListItem_addText);
@@ -183,22 +194,29 @@ public class Activity_ViewListItem extends Activity implements View_Activity
         else
             {
             timePicker.setVisibility(View.VISIBLE);
-
-
-
-
-            //Create notification
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"test")
-                    .setSmallIcon(R.drawable.ic_check_black_24dp)
-                    .setContentTitle(UserSettings.GetNotificationPrefix() + targetListItem.GetContents())
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-            Notification notif = builder.build();
-
-            NotificationManager NotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-            NotificationManager.notify(001,notif);
             }
+        }
+
+    private void UpdateNotification()
+        {
+        System.out.println("Getting this notification going . . .");
+        Intent newIntent = new Intent(this,NotificationCreator.class);
+
+        newIntent.putExtra("name",targetListItem.GetContents());
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,newIntent,0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(UserSettings.GetCurrentDate().GetAsLong());
+        calendar.set(Calendar.HOUR_OF_DAY,targetListItem.reminderHour);
+        calendar.set(Calendar.MINUTE,targetListItem.reminderMinute);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
+
+        long time = 1;
+        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
         }
 
     private void ShowClock(boolean selectClock)
@@ -222,6 +240,8 @@ public class Activity_ViewListItem extends Activity implements View_Activity
         targetListItem.reminderHour = timeSelection.getCurrentHour();
         targetListItem.reminderMinute = timeSelection.getCurrentMinute();
 
+        UpdateNotification();
+
         UpdateReminderTime();
         }
 
@@ -242,7 +262,7 @@ public class Activity_ViewListItem extends Activity implements View_Activity
         timeToString.append(":");
 
         //Minutes
-        if(targetListItem.reminderMinute > 10)
+        if(targetListItem.reminderMinute > 9)
             {
             timeToString.append(targetListItem.reminderMinute);
             }
@@ -275,6 +295,37 @@ public class Activity_ViewListItem extends Activity implements View_Activity
         else
             {
             noSubItems.setVisibility(View.GONE);
+            }
+        }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position)
+        {
+        if (viewHolder != null)
+            {
+            // get the removed item name to display it in snack bar
+            String name = targetListItem.subListItems.get(viewHolder.getAdapterPosition()).GetContents();
+
+            // backup of removed item for undo purpose
+            final SubListItem deletedItem = targetListItem.subListItems.get(viewHolder.getAdapterPosition());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            adapter.RemoveItem(viewHolder.getAdapterPosition());
+
+            // showing snack bar with Undo option
+            Snackbar snackbar = Snackbar.make(recyclerView, name + " was deleted.", Snackbar.LENGTH_LONG);
+            snackbar.setAction("UNDO", new View.OnClickListener()
+                {
+                @Override
+                public void onClick(View view)
+                    {
+                    // undo is selected, restore the deleted item
+                    adapter.RestoreItem(deletedItem, deletedIndex);
+                    }
+                });
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
+            snackbar.show();
             }
         }
     }

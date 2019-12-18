@@ -1,26 +1,33 @@
 package com.example.cs356_project.Activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs356_project.Activities.ViewTools.CheckListAdapter;
+import com.example.cs356_project.Activities.ViewTools.RecyclerItemTouchHelper;
 import com.example.cs356_project.Activities.ViewTools.View_Activity;
 import com.example.cs356_project.R;
 import com.example.cs356_project.dataModel.CheckListItem;
 import com.example.cs356_project.dataModel.Date;
 import com.example.cs356_project.dataModel.UserSettings.UserSettings;
+import com.google.android.material.snackbar.Snackbar;
 
-public class Activity_ViewCheckList extends Activity implements View_Activity
+import java.util.Random;
+
+public class Activity_ViewCheckList extends Activity implements View_Activity, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
     {
     //GUI stuff
     private RelativeLayout overlayBG;
@@ -29,17 +36,45 @@ public class Activity_ViewCheckList extends Activity implements View_Activity
     private TextView dateTitle;
     private RecyclerView recyclerView;
     private Date date;
+    private CheckListAdapter adapter;
 
-    CheckListAdapter adapter;
+    private final static String[] hints  = {
+                                            "Did you know?\nThat you can set a todo on a date in advance!",
+                                            "Did you know?\nYou can set a notification for todo items!",
+                                            "Did you know?\nYou can add sub-tasks to a todo!",
+                                            "Did you know?\nYou can order your tasks by priority!"
+                                            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
         {
+        //Setting the user settings
         UserSettings.SetCurrentActivity(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_checklist);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+
+        //Welcome
+        int rand =  new Random().nextInt((hints.length));
+
+        final View welcomeParent = findViewById(R.id.list_welcome_p);
+        TextView welcomeText = findViewById(R.id.list_welcome_text);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable()
+            {
+            public void run()
+                {
+                Animation fadeout = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fadeout1);
+                welcomeParent.setAnimation(fadeout);
+                welcomeParent.animate();
+                welcomeParent.setVisibility(View.GONE);
+                }
+            }, 2000);
+
+        System.out.println(hints[rand]);
+        welcomeText.setText(hints[rand]);
 
         //Set the current date on the calendar and title
         dateTitle = findViewById(R.id.list_date);
@@ -66,6 +101,10 @@ public class Activity_ViewCheckList extends Activity implements View_Activity
         recyclerView = findViewById(R.id.checkbox_recycleView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+
+        // attaching the touch helper to recycler view
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT + ItemTouchHelper.RIGHT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
         //Add button
         findViewById(R.id.addListItemButton).setOnClickListener(new View.OnClickListener()
@@ -162,5 +201,36 @@ public class Activity_ViewCheckList extends Activity implements View_Activity
     public void UpdateListChange()
         {
         adapter.notifyDataSetChanged();
+        }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position)
+        {
+        if (viewHolder != null)
+            {
+            // get the removed item name to display it in snack bar
+            String name = UserSettings.checkListItems.get(viewHolder.getAdapterPosition()).GetContents();
+
+            // backup of removed item for undo purpose
+            final CheckListItem deletedItem = UserSettings.checkListItems.get(viewHolder.getAdapterPosition());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            adapter.RemoveItem(viewHolder.getAdapterPosition());
+
+        // showing snack bar with Undo option
+        Snackbar snackbar = Snackbar.make(recyclerView, name + " was deleted.", Snackbar.LENGTH_LONG);
+        snackbar.setAction("UNDO", new View.OnClickListener()
+                {
+                @Override
+                public void onClick(View view)
+                    {
+                    // undo is selected, restore the deleted item
+                    adapter.RestoreItem(deletedItem, deletedIndex);
+                    }
+                });
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
+            snackbar.show();
+            }
         }
     }

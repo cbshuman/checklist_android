@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs356_project.AudioPlayer.AudioController;
 import com.example.cs356_project.R;
+import com.example.cs356_project.dataModel.CheckListItem;
 import com.example.cs356_project.dataModel.SubListItem;
 import com.example.cs356_project.dataModel.UserSettings.UserSettings;
 import com.google.android.material.snackbar.Snackbar;
@@ -52,6 +53,18 @@ public class SubListAdapter extends RecyclerView.Adapter<SubListAdapter.CheckSub
         return (subListItems.size());
         }
 
+    public void RemoveItem(int position)
+        {
+        subListItems.remove(position);
+        notifyItemRemoved(position);
+        }
+
+    public void RestoreItem(SubListItem item, int position)
+        {
+        subListItems.add(position, item);
+        notifyItemInserted(position);
+        }
+
     public class CheckSubListItemView extends RecyclerView.ViewHolder
         {
         View view;
@@ -69,7 +82,7 @@ public class SubListAdapter extends RecyclerView.Adapter<SubListAdapter.CheckSub
             //System.out.println("  ----->   Binding Item : " + subListItem.GetContents());
             //Get the required views
             final TextView content = view.findViewById(R.id.sublist_content);
-            final LinearLayout parent = view.findViewById(R.id.checkListItem_P);
+            final View parent = view.findViewById(R.id.checkListItem_P);
 
             //Set the text
             content.setText(checkListItem.GetContents());
@@ -117,18 +130,6 @@ public class SubListAdapter extends RecyclerView.Adapter<SubListAdapter.CheckSub
                             content.setTextColor(ContextCompat.getColor(view.getContext(),R.color.black));
                             }
                         }
-                    }
-                });
-
-            //Set the delete button
-            final ImageView deleteButton = view.findViewById(R.id.sublist_delete);
-            deleteButton.setOnClickListener(new View.OnClickListener()
-                {
-                @Override
-                public void onClick(View v)
-                    {
-                    checkListItem.RemoveFromParent();
-                    UserSettings.UpdateList();
                     }
                 });
             //End of BindCheckListItem

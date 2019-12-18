@@ -1,5 +1,6 @@
 package com.example.cs356_project.Activities.ViewTools;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -13,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -57,6 +59,18 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.Chec
         return (UserSettings.checkListItems.size());
         }
 
+    public void RemoveItem(int position)
+        {
+        UserSettings.checkListItems.remove(position);
+        notifyItemRemoved(position);
+        }
+
+    public void RestoreItem(CheckListItem item, int position)
+        {
+        UserSettings.checkListItems.add(position, item);
+        notifyItemInserted(position);
+        }
+
     public class CheckListItemView extends RecyclerView.ViewHolder
         {
         View view;
@@ -71,11 +85,11 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.Chec
         public void BindCheckListItem(CheckListItem input)
             {
             this.checkListItem = input;
-            System.out.println("-----> Binding Item : " + input.GetContents() + "/" + input.getCompleted() + "/" + checkListItem.getCompleted());
+            //System.out.println("-----> Binding Item : " + input.GetContents() + "/" + input.getCompleted() + "/" + checkListItem.getCompleted());
 
             //Get the views needed
             final TextView content = view.findViewById(R.id.list_content);
-            final LinearLayout parent = view.findViewById(R.id.checkListItem_P);
+            final ViewGroup parent = view.findViewById(R.id.checkListItem_P);
 
             //Set the contents
             content.setText(checkListItem.GetContents());
@@ -101,7 +115,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.Chec
             @Override
             public void onClick(View v)
                 {
-                System.out.println("Something changed: " + checkListItem.GetContents());
+                //System.out.println("Something changed: " + checkListItem.GetContents());
                 checkListItem.SetCompleted(checkBox.isChecked());
 
                 if(checkListItem.getCompleted())
